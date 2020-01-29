@@ -3,15 +3,15 @@ package com.tracking.tracking.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name="User")
+@Table(name="usuario")
 public class User {
     @GeneratedValue
     @Id
-    @Column(name="id", unique = true)
-    private long id;
+    @Column(name="userId", unique = true)
+    private long userId;
 
     @Column(name="username", unique = true)
-    private String usuario;
+    private String username;
 
     @Column(name="password")
     private String password;
@@ -23,19 +23,19 @@ public class User {
     private boolean active;
 
     public long getId() {
-        return id;
+        return userId;
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.userId = id;
     }
 
-    public String getUsuario() {
-        return usuario;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
