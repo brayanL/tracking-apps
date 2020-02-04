@@ -1,4 +1,4 @@
-package tracking.com.trackingandroid.apps.authenticate;
+package tracking.com.trackingandroid.apps.register;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

@@ -1,0 +1,7 @@
+package tracking.com.trackingandroid.apps.login.ui;
+
+public interface LoginView {
+
+    void showMainMenu();
+
+}
