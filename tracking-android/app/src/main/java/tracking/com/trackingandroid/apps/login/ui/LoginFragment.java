@@ -7,9 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.AndroidSupportInjection;
@@ -22,6 +24,11 @@ public class LoginFragment extends Fragment implements LoginView {
     LoginPresenter loginPresenter;
     @Inject
     Context context;
+
+    @BindView(R.id.username)
+    EditText username;
+    @BindView(R.id.password)
+    EditText password;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -45,8 +52,7 @@ public class LoginFragment extends Fragment implements LoginView {
 
     @OnClick(R.id.btn_login)
     public void login() {
-        Log.d("LOGIN", "CLICKED");
-        loginPresenter.login("bomar24", "lalala");
+        loginPresenter.login(username.getText().toString().trim(), password.getText().toString().trim());
     }
 
     @Override

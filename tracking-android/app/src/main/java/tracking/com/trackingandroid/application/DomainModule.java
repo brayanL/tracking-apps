@@ -12,6 +12,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import tracking.com.trackingandroid.BuildConfig;
+import tracking.com.trackingandroid.data.DataManager;
 import tracking.com.trackingandroid.data.remote.TrackingService;
 
 /**
@@ -28,6 +29,11 @@ public class DomainModule {
     @Provides
     Context provideContext(TrackingApplication application) {
         return application.getApplicationContext();
+    }
+
+    @Provides
+    DataManager proviDataManager(TrackingService trackingService) {
+        return new DataManager(trackingService);
     }
 
     @Provides
