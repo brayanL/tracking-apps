@@ -48,4 +48,11 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
         // Si la autenticacion fue exitosa, agregamos el token a la respuesta
         JwtUtil.addAuthentication(res, auth.getName());
     }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        System.out.println("enter unsuccessfulAuthentication: " + response);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        // super.unsuccessfulAuthentication(request, response, failed);
+    }
 }

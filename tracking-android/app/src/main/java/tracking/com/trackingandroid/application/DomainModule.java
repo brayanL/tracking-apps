@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.google.gson.GsonBuilder;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -13,6 +15,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import tracking.com.trackingandroid.BuildConfig;
 import tracking.com.trackingandroid.data.DataManager;
+import tracking.com.trackingandroid.data.local.PreferencesHelper;
 import tracking.com.trackingandroid.data.remote.TrackingService;
 
 /**
@@ -32,8 +35,13 @@ public class DomainModule {
     }
 
     @Provides
-    DataManager proviDataManager(TrackingService trackingService) {
-        return new DataManager(trackingService);
+    PreferencesHelper providesPreferencesHelper(Context context){
+        return new PreferencesHelper(context);
+    }
+
+    @Provides
+    DataManager proviDataManager(TrackingService trackingService, PreferencesHelper preferencesHelper) {
+        return new DataManager(trackingService, preferencesHelper);
     }
 
     @Provides

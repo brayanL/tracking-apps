@@ -9,6 +9,7 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 import tracking.com.trackingandroid.apps.login.ui.LoginView;
 import tracking.com.trackingandroid.data.DataManager;
+import tracking.com.trackingandroid.data.local.PreferencesHelper;
 
 public class LoginPresenterImpl implements LoginPresenter {
     private static final String TAG = LoginPresenterImpl.class.getSimpleName();
@@ -35,11 +36,18 @@ public class LoginPresenterImpl implements LoginPresenter {
                     @Override
                     public void onNext(Response<Void> voidResponse) {
                         Log.d(TAG, "RESPONSE: " + voidResponse.headers().get("Authorization"));
+                        if (voidResponse.headers().get("Authorization") != null) {
+                            dataManager.putString(PreferencesHelper.TOKEN,
+                                    voidResponse.headers().get("Authorization"));
+                        } else {
+                            // voidResponse.code();
+                        }
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e(TAG, e.toString());
+                        Log.e(TAG, "onError Tracking: " + e.toString());
                     }
 
                     @Override

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import io.reactivex.Observable;
 import retrofit2.Response;
+import tracking.com.trackingandroid.data.local.PreferencesHelper;
 import tracking.com.trackingandroid.data.model.LoginUser;
 import tracking.com.trackingandroid.data.remote.TrackingService;
 
@@ -17,9 +18,11 @@ import tracking.com.trackingandroid.data.remote.TrackingService;
 public class DataManager {
 
     private TrackingService trackingService;
+    private PreferencesHelper preferencesHelper;
 
-    public DataManager(TrackingService trackingService) {
+    public DataManager(TrackingService trackingService, PreferencesHelper preferencesHelper) {
         this.trackingService = trackingService;
+        this.preferencesHelper = preferencesHelper;
     }
 
     public Observable<Response<Void>> login(String username, String password) {
@@ -27,5 +30,13 @@ public class DataManager {
         loginUser.setUsername(username);
         loginUser.setPassword(password);
         return trackingService.login(loginUser);
+    }
+
+    public void putString(String key, String value) {
+        preferencesHelper.setString(key, value);
+    }
+
+    public String getString(String key) {
+        return preferencesHelper.getString(key);
     }
 }
