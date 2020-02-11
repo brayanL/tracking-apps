@@ -39,8 +39,11 @@ public class LoginPresenterImpl implements LoginPresenter {
                         if (voidResponse.headers().get("Authorization") != null) {
                             dataManager.putString(PreferencesHelper.TOKEN,
                                     voidResponse.headers().get("Authorization"));
+                            loginView.showMainMenu();
                         } else {
-                            // voidResponse.code();
+                            if (voidResponse.code() == 401) {
+                                loginView.showMessages("Credenciales Incorrectas");
+                            }
                         }
 
                     }

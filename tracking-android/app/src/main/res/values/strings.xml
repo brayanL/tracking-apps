@@ -13,4 +13,13 @@
     <string name="register">Register</string>
     <string name="re_type_password">Re-type Password</string>
     <string name="your_name">Full Name</string>
+
+    <!--main menu-->
+    <string name="main_division">Menu</string>
+    <string name="tours_menu">Mis Recorridos</string>
+    <string name="record_tours_menu">Registrar Recorridos</string>
+
+    <!--Drawer-->
+    <string name="navigation_drawer_open">Abrir</string>
+    <string name="navigation_drawer_close">Cerrar</string>
 </resources>

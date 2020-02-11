@@ -54,6 +54,7 @@ public class DomainModule {
                 : HttpLoggingInterceptor.Level.NONE);
 
         httpClientBuilder.addNetworkInterceptor(httpLoggingInterceptor);
+        // httpClientBuilder.addInterceptor();
 
         OkHttpClient customOkHttpClient = httpClientBuilder.build();
 
