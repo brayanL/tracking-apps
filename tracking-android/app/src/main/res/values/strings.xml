@@ -22,4 +22,8 @@
     <!--Drawer-->
     <string name="navigation_drawer_open">Abrir</string>
     <string name="navigation_drawer_close">Cerrar</string>
+
+    <!--Dexter-->
+    <string name="denied_permission_permanently">No puede acceder a esta funcionalidad, ha negado los permisos. Debe activar los permisos manualmente</string>
+    <string name="permission_location_error">No ha concedido permisos para su Ubicación</string>\
 </resources>

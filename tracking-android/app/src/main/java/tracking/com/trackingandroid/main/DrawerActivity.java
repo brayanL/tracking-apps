@@ -1,5 +1,6 @@
 package tracking.com.trackingandroid.main;
 
+import android.Manifest;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
@@ -12,12 +13,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import tracking.com.trackingandroid.R;
 import tracking.com.trackingandroid.apps.tours.RecordToursFragment;
 import tracking.com.trackingandroid.apps.tours.ToursFragment;
+import tracking.com.trackingandroid.util.CommonUtils;
 
 public class DrawerActivity extends AppCompatActivity {
 
@@ -32,8 +42,8 @@ public class DrawerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_drawer);
 
         ButterKnife.bind(this);
-
         setupNavigationDrawer();
+        initDexter();
     }
 
     @Override
@@ -108,4 +118,35 @@ public class DrawerActivity extends AppCompatActivity {
         setTitle(menuItem.getTitle());
         drawerLayout.closeDrawers();
     }
+
+    private void initDexter() {
+        Dexter.withActivity(this)
+                .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                .withListener(listenerLocation)
+                .check();
+    }
+
+    private PermissionListener listenerLocation = new PermissionListener() {
+
+        @Override
+        public void onPermissionGranted(PermissionGrantedResponse response) {
+            CommonUtils.showSimpleToastMessages(getApplicationContext(), "Permiso de Ubicacion Concedido");
+            /*Toast.makeText(getApplicationContext(), "Permiso de Ubicacion Concedido",
+                    Toast.LENGTH_SHORT).show();*/
+        }
+
+        @Override
+        public void onPermissionDenied(PermissionDeniedResponse response) {
+            if (response.isPermanentlyDenied()) {
+                CommonUtils.showSimpleToastMessages(getApplicationContext(), getString(R.string.denied_permission_permanently));
+            } else {
+                CommonUtils.showSimpleToastMessages(getApplicationContext(), getString(R.string.permission_location_error));
+            }
+        }
+
+        @Override
+        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+            token.continuePermissionRequest();
+        }
+    };
 }

@@ -35,4 +35,5 @@ ext {
     dagger = '2.20'
     butterKnife = '8.8.1'
     glide = '4.8.0'
+    dexter = '5.0.0'
 }
