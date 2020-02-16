@@ -51,8 +51,6 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        System.out.println("enter unsuccessfulAuthentication: " + response);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        // super.unsuccessfulAuthentication(request, response, failed);
     }
 }
