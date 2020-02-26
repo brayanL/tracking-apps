@@ -1,19 +1,76 @@
 package tracking.com.trackingandroid.apps.tours;
 
 
+import android.Manifest;
+import android.content.Context;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ToggleButton;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.Task;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import dagger.android.support.AndroidSupportInjection;
 import tracking.com.trackingandroid.R;
+import tracking.com.trackingandroid.util.CommonUtils;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RecordToursFragment extends Fragment {
+public class RecordToursFragment extends Fragment implements OnMapReadyCallback {
 
+    private static final String TAG = RecordToursFragment.class.getSimpleName();
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private static final int INTERVAL = 10000;
+
+    private FusedLocationProviderClient mFusedLocationClient;
+    private Location mCurrentLocation;
+    private LocationCallback mLocationCallback;
+    private LocationRequest mLocationRequest;
+
+    @Inject
+    Context context;
+
+    @BindView(R.id.map_view)
+    MapView mapView;
+
+    @BindView(R.id.start_button)
+    ToggleButton startButton;
 
     public RecordToursFragment() {
         // Required empty public constructor
@@ -24,7 +81,191 @@ public class RecordToursFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_record_tours, container, false);
+        View view = inflater.inflate(R.layout.fragment_record_tours, container, false);
+        ButterKnife.bind(this, view);
+
+        //map
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
+
+        locationConfig();
+        return view;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        GoogleMap mMap;
+        try {
+            mMap = googleMap;
+            mMap.setMyLocationEnabled(true);
+
+            // Add a marker in Quito and move the camera
+            LatLng quito = new LatLng(-0.1635799, -78.4805842);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(quito, 15);
+            mMap.addMarker(new MarkerOptions().position(quito).title("Marker in Quito"));
+            mMap.animateCamera(cameraUpdate);
+        } catch (SecurityException e) {
+            Log.e(TAG, "Error Map: " + e.toString());
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+        stopLocationUpdates();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+    }
+
+    @OnClick(R.id.start_button)
+    public void startRecordTour() {
+        if (checkLocationPermissions()) {
+            if (checkGooglePlayServices()) {
+                if (startButton.isChecked()) {
+                    startLocationUpdates();
+                } else {
+                    stopLocationUpdates();
+                }
+            }
+        }
+    }
+
+    private Boolean checkLocationPermissions() {
+        int permissionState = ActivityCompat.checkSelfPermission(context,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        Log.d(TAG, "checkLocationPermissions: " + permissionState);
+        return permissionState == PackageManager.PERMISSION_GRANTED;
+    }
+
+    /**
+     * Verify the Google Play Services availability, it is necessary for get current user location
+     * @return if googlePlayServices is available
+     * */
+    private Boolean checkGooglePlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(context);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            CommonUtils.showSimpleToastMessages(context, getString(R.string.error_play_services));
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(getActivity(), resultCode,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                CommonUtils.showSimpleToastMessages(context, getString(R.string.error_not_available_play_services));
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void startLocationUpdates() {
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setInterval(INTERVAL);
+        mLocationRequest.setFastestInterval(INTERVAL);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(mLocationRequest);
+
+        //check whether the current location settings are satisfied
+        SettingsClient client = LocationServices.getSettingsClient(context);
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+
+        task.addOnSuccessListener(getActivity(), locationSettingsResponse -> setCurrentLocation());
+        task.addOnFailureListener(e -> {
+            int statusCode = ((ApiException) e).getStatusCode();
+            switch (statusCode) {
+                case CommonStatusCodes.RESOLUTION_REQUIRED:
+                    // Location settings are not satisfied, but this can be fixed
+                    // by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(getActivity(),
+                                1000);
+                    } catch (IntentSender.SendIntentException sendEx) {
+                        // Ignore the error.
+                    }
+                    break;
+                case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                    // Location settings are not satisfied. However, we have no way
+                    // to fix the settings so we won't show the dialog.
+                    break;
+            }
+        });
+    }
+
+    /**
+     * Implements the callback, receive the current user location.
+     * */
+    private void locationConfig() {
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+
+                mCurrentLocation = locationResult.getLastLocation();
+                if (CommonUtils.isNetworkAvailable(context)) {
+                    // presenter.getWeather(mCurrentLocation);
+                    Log.d(TAG, "onLocationResult: " + mCurrentLocation.getLatitude() + ", " + mCurrentLocation.getLongitude());
+                    // connectionMessage.setVisibility(View.GONE);
+                } else {
+                    // connectionMessage.setText(getString(R.string.not_internet_connection));
+                    // connectionMessage.setVisibility(View.VISIBLE);
+                    Log.d(TAG, "onLocationResult: No internet connection");
+                }
+            }
+        };
+    }
+
+
+    /**
+     * Set the callback the which will receive the location updates.
+     * */
+    private void setCurrentLocation() {
+        try {
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                    mLocationCallback, Looper.myLooper());
+        } catch (SecurityException e) {
+            Log.e("TAG1", "onSuccess Error: ", e);
+        }
+    }
+
+    private void stopLocationUpdates() {
+        if (checkLocationPermissions()) {
+            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+        }
     }
 
 }

@@ -24,7 +24,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.DrawerActivity"></activity>
+        <activity android:name=".main.DrawerActivity" />
+        <activity
+            android:name=".apps.tours.MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAPjw6dxI1rwc_x21C7l6d2_LHcsO5FWr0" />
     </application>
 
 </manifest>

@@ -26,4 +26,13 @@
     <!--Dexter-->
     <string name="denied_permission_permanently">No puede acceder a esta funcionalidad, ha negado los permisos. Debe activar los permisos manualmente</string>
     <string name="permission_location_error">No ha concedido permisos para su Ubicación</string>\
+
+    <!--Record Tours-->
+    <string name="start_tour">Start</string>
+    <string name="finish_tour">Finish</string>
+
+    <!--Location-->
+    <string name="error_play_services">Debe actualizar o instalar Google Play Services</string>
+    <string name="error_not_available_play_services">Este dispositivo no Soporta Google Play Services</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

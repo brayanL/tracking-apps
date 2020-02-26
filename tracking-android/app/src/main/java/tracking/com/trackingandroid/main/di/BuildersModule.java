@@ -6,6 +6,8 @@ import tracking.com.trackingandroid.application.DomainModule;
 import tracking.com.trackingandroid.apps.login.di.LoginModule;
 import tracking.com.trackingandroid.apps.login.di.LoginViewModule;
 import tracking.com.trackingandroid.apps.login.ui.LoginFragment;
+import tracking.com.trackingandroid.apps.tours.RecordToursFragment;
+import tracking.com.trackingandroid.main.DrawerActivity;
 import tracking.com.trackingandroid.main.MainActivity;
 
 /**
@@ -20,5 +22,11 @@ public abstract class BuildersModule {
 
     @ContributesAndroidInjector(modules = {DomainModule.class, LoginModule.class, LoginViewModule.class})
     abstract LoginFragment bindLoginFragment();
+
+    @ContributesAndroidInjector
+    abstract DrawerActivity bindDrawerActivity();
+
+    @ContributesAndroidInjector(modules = {DomainModule.class})
+    abstract RecordToursFragment bindRecordToursFragment();
 
 }
