@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Chronometer;
+import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -62,6 +65,7 @@ public class RecordToursFragment extends Fragment implements OnMapReadyCallback 
     private Location mCurrentLocation;
     private LocationCallback mLocationCallback;
     private LocationRequest mLocationRequest;
+    private Long elapsedTime;
 
     @Inject
     Context context;
@@ -71,6 +75,12 @@ public class RecordToursFragment extends Fragment implements OnMapReadyCallback 
 
     @BindView(R.id.start_button)
     ToggleButton startButton;
+
+    @BindView(R.id.chronometer)
+    Chronometer chronometer;
+
+    @BindView(R.id.timer_container)
+    RelativeLayout timerContainer;
 
     public RecordToursFragment() {
         // Required empty public constructor
@@ -126,6 +136,7 @@ public class RecordToursFragment extends Fragment implements OnMapReadyCallback 
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+        chronometer.stop();
     }
 
     @Override
@@ -152,8 +163,15 @@ public class RecordToursFragment extends Fragment implements OnMapReadyCallback 
             if (checkGooglePlayServices()) {
                 if (startButton.isChecked()) {
                     startLocationUpdates();
+                    //clock
+                    chronometer.setBase(SystemClock.elapsedRealtime());
+                    chronometer.start();
+                    timerContainer.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 } else {
                     stopLocationUpdates();
+                    chronometer.stop();
+                    chronometer.setText(R.string.initial_time);
+                    timerContainer.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                 }
             }
         }
