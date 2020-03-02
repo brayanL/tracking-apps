@@ -6,6 +6,7 @@ import io.reactivex.Observable;
 import retrofit2.Response;
 import tracking.com.trackingandroid.data.local.PreferencesHelper;
 import tracking.com.trackingandroid.data.model.LoginUser;
+import tracking.com.trackingandroid.data.model.Tour;
 import tracking.com.trackingandroid.data.remote.TrackingService;
 
 /**
@@ -30,6 +31,10 @@ public class DataManager {
         loginUser.setUsername(username);
         loginUser.setPassword(password);
         return trackingService.login(loginUser);
+    }
+
+    public Observable<Tour> createTour(Tour tour) {
+        return trackingService.createTour(tour);
     }
 
     public void putString(String key, String value) {

@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -31,7 +30,7 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import tracking.com.trackingandroid.R;
-import tracking.com.trackingandroid.apps.tours.RecordToursFragment;
+import tracking.com.trackingandroid.apps.record_tour.ui.RecordToursFragment;
 import tracking.com.trackingandroid.apps.tours.ToursFragment;
 import tracking.com.trackingandroid.util.CommonUtils;
 
@@ -140,9 +139,7 @@ public class DrawerActivity extends AppCompatActivity implements HasSupportFragm
 
         @Override
         public void onPermissionGranted(PermissionGrantedResponse response) {
-            CommonUtils.showSimpleToastMessages(getApplicationContext(), "Permiso de Ubicacion Concedido");
-            /*Toast.makeText(getApplicationContext(), "Permiso de Ubicacion Concedido",
-                    Toast.LENGTH_SHORT).show();*/
+            // called when permissions are granted
         }
 
         @Override

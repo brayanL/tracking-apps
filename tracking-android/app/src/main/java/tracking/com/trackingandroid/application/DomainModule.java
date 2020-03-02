@@ -16,6 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import tracking.com.trackingandroid.BuildConfig;
 import tracking.com.trackingandroid.data.DataManager;
 import tracking.com.trackingandroid.data.local.PreferencesHelper;
+import tracking.com.trackingandroid.data.remote.TokenInterceptor;
 import tracking.com.trackingandroid.data.remote.TrackingService;
 
 /**
@@ -45,7 +46,12 @@ public class DomainModule {
     }
 
     @Provides
-    TrackingService provideWhatMovieService() {
+    TokenInterceptor providesTokenInterceptor(PreferencesHelper preferencesHelper) {
+        return new TokenInterceptor(preferencesHelper);
+    }
+
+    @Provides
+    TrackingService provideWhatMovieService(TokenInterceptor tokenInterceptor) {
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
 
@@ -54,7 +60,7 @@ public class DomainModule {
                 : HttpLoggingInterceptor.Level.NONE);
 
         httpClientBuilder.addNetworkInterceptor(httpLoggingInterceptor);
-        // httpClientBuilder.addInterceptor();
+        httpClientBuilder.addInterceptor(tokenInterceptor);
 
         OkHttpClient customOkHttpClient = httpClientBuilder.build();
 

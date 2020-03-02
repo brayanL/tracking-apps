@@ -1,4 +1,4 @@
-package tracking.com.trackingandroid.apps.tours;
+package tracking.com.trackingandroid.apps.record_tour.ui;
 
 
 import android.Manifest;
@@ -43,6 +43,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -50,25 +56,34 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.AndroidSupportInjection;
 import tracking.com.trackingandroid.R;
+import tracking.com.trackingandroid.apps.record_tour.RecordToursPresenter;
+import tracking.com.trackingandroid.data.model.Tour;
 import tracking.com.trackingandroid.util.CommonUtils;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RecordToursFragment extends Fragment implements OnMapReadyCallback {
+public class RecordToursFragment extends Fragment implements OnMapReadyCallback, RecordToursView {
 
     private static final String TAG = RecordToursFragment.class.getSimpleName();
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final int INTERVAL = 10000;
+    private String timeStart;
+    private String timeFinish;
 
     private FusedLocationProviderClient mFusedLocationClient;
     private Location mCurrentLocation;
     private LocationCallback mLocationCallback;
     private LocationRequest mLocationRequest;
-    private Long elapsedTime;
+    private List<tracking.com.trackingandroid.data.model.Location> locationList = new ArrayList<>();
+    private tracking.com.trackingandroid.data.model.Location location;
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    private DialogLoading dialogLoading;
 
     @Inject
     Context context;
+    @Inject
+    RecordToursPresenter presenter;
 
     @BindView(R.id.map_view)
     MapView mapView;
@@ -90,6 +105,7 @@ public class RecordToursFragment extends Fragment implements OnMapReadyCallback 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        dialogLoading = new DialogLoading(getActivity());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_record_tours, container, false);
         ButterKnife.bind(this, view);
@@ -163,18 +179,30 @@ public class RecordToursFragment extends Fragment implements OnMapReadyCallback 
             if (checkGooglePlayServices()) {
                 if (startButton.isChecked()) {
                     startLocationUpdates();
-                    //clock
                     chronometer.setBase(SystemClock.elapsedRealtime());
                     chronometer.start();
                     timerContainer.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    timeStart = dateFormat.format(new Date());
                 } else {
                     stopLocationUpdates();
                     chronometer.stop();
                     chronometer.setText(R.string.initial_time);
                     timerContainer.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                    timeFinish = dateFormat.format(new Date());
+                    presenter.createTour(new Tour(timeStart, timeFinish, locationList));
                 }
             }
         }
+    }
+
+    @Override
+    public void showProgress() {
+        dialogLoading.startLoadingDialog();
+    }
+
+    @Override
+    public void hideProgress() {
+        dialogLoading.dismissLoadingDialog();
     }
 
     private Boolean checkLocationPermissions() {
@@ -256,8 +284,9 @@ public class RecordToursFragment extends Fragment implements OnMapReadyCallback 
                 mCurrentLocation = locationResult.getLastLocation();
                 if (CommonUtils.isNetworkAvailable(context)) {
                     // presenter.getWeather(mCurrentLocation);
-                    Log.d(TAG, "onLocationResult: " + mCurrentLocation.getLatitude() + ", " + mCurrentLocation.getLongitude());
-                    // connectionMessage.setVisibility(View.GONE);
+                    // Log.d(TAG, "onLocationResult: " + mCurrentLocation.getLatitude() + ", " + mCurrentLocation.getLongitude());
+                    locationList.add(new tracking.com.trackingandroid.data.model.Location( Double.toString(mCurrentLocation.getLatitude()),
+                            Double.toString(mCurrentLocation.getLongitude())));
                 } else {
                     // connectionMessage.setText(getString(R.string.not_internet_connection));
                     // connectionMessage.setVisibility(View.VISIBLE);

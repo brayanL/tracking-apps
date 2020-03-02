@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".apps.tours.RecordToursFragment">
+    tools:context=".apps.record_tour.ui.RecordToursFragment">
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/map_view"
