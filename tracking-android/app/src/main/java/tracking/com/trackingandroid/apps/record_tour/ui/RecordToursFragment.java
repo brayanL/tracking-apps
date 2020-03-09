@@ -70,7 +70,9 @@ public class RecordToursFragment extends Fragment implements OnMapReadyCallback,
     private static final int INTERVAL = 10000;
     private String timeStart;
     private String timeFinish;
+    private Boolean firstTimeFlag = true;
 
+    private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationClient;
     private Location mCurrentLocation;
     private LocationCallback mLocationCallback;
@@ -120,16 +122,9 @@ public class RecordToursFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        GoogleMap mMap;
         try {
             mMap = googleMap;
             mMap.setMyLocationEnabled(true);
-
-            // Add a marker in Quito and move the camera
-            LatLng quito = new LatLng(-0.1635799, -78.4805842);
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(quito, 15);
-            mMap.addMarker(new MarkerOptions().position(quito).title("Marker in Quito"));
-            mMap.animateCamera(cameraUpdate);
         } catch (SecurityException e) {
             Log.e(TAG, "Error Map: " + e.toString());
         }
@@ -139,13 +134,17 @@ public class RecordToursFragment extends Fragment implements OnMapReadyCallback,
     public void onResume() {
         super.onResume();
         mapView.onResume();
+        if (checkLocationPermissions()) {
+            if (checkGooglePlayServices()) {
+                startLocationUpdates();
+            }
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mapView.onPause();
-        stopLocationUpdates();
     }
 
     @Override
@@ -153,6 +152,7 @@ public class RecordToursFragment extends Fragment implements OnMapReadyCallback,
         super.onDestroy();
         mapView.onDestroy();
         chronometer.stop();
+        stopLocationUpdates();
     }
 
     @Override
@@ -178,13 +178,12 @@ public class RecordToursFragment extends Fragment implements OnMapReadyCallback,
         if (checkLocationPermissions()) {
             if (checkGooglePlayServices()) {
                 if (startButton.isChecked()) {
-                    startLocationUpdates();
+                    locationList.clear();
                     chronometer.setBase(SystemClock.elapsedRealtime());
                     chronometer.start();
                     timerContainer.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                     timeStart = dateFormat.format(new Date());
                 } else {
-                    stopLocationUpdates();
                     chronometer.stop();
                     chronometer.setText(R.string.initial_time);
                     timerContainer.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
@@ -282,15 +281,14 @@ public class RecordToursFragment extends Fragment implements OnMapReadyCallback,
                 super.onLocationResult(locationResult);
 
                 mCurrentLocation = locationResult.getLastLocation();
-                if (CommonUtils.isNetworkAvailable(context)) {
-                    // presenter.getWeather(mCurrentLocation);
-                    // Log.d(TAG, "onLocationResult: " + mCurrentLocation.getLatitude() + ", " + mCurrentLocation.getLongitude());
+                if (firstTimeFlag) {
+                    animateCamera(mCurrentLocation);
+                    firstTimeFlag = false;
+                }
+                if (startButton.isChecked()) {
+                    // Log.i(TAG, "Location correct: " + mCurrentLocation.getLatitude() + " " + mCurrentLocation.getLongitude());
                     locationList.add(new tracking.com.trackingandroid.data.model.Location( Double.toString(mCurrentLocation.getLatitude()),
                             Double.toString(mCurrentLocation.getLongitude())));
-                } else {
-                    // connectionMessage.setText(getString(R.string.not_internet_connection));
-                    // connectionMessage.setVisibility(View.VISIBLE);
-                    Log.d(TAG, "onLocationResult: No internet connection");
                 }
             }
         };
@@ -313,6 +311,12 @@ public class RecordToursFragment extends Fragment implements OnMapReadyCallback,
         if (checkLocationPermissions()) {
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
         }
+    }
+
+    private void animateCamera(@NonNull Location location) {
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15);
+        mMap.animateCamera(cameraUpdate);
     }
 
 }

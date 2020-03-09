@@ -12,6 +12,6 @@ public interface TrackingService {
     @POST("/login")
     Observable<Response<Void>> login(@Body LoginUser loginUser);
 
-    @POST("/register/tour")
+    @POST("/tour/register")
     Observable<Tour> createTour(@Body Tour tour);
 }
