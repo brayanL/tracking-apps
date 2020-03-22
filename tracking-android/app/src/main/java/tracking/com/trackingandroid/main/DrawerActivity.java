@@ -31,7 +31,7 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import tracking.com.trackingandroid.R;
 import tracking.com.trackingandroid.apps.record_tour.ui.RecordToursFragment;
-import tracking.com.trackingandroid.apps.tours.ToursFragment;
+import tracking.com.trackingandroid.apps.tours.ui.ToursFragment;
 import tracking.com.trackingandroid.util.CommonUtils;
 
 public class DrawerActivity extends AppCompatActivity implements HasSupportFragmentInjector {

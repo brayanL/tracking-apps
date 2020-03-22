@@ -37,5 +37,10 @@
     <string name="title_activity_maps">Map</string>
     <string name="loading_text">Loading…</string>
 
+    <!--List-->
+    <string name="id_text">Id:</string>
+    <string name="time_travel_text">Tiempo Recorrido:</string>
+    <string name="date_text">Fecha:</string>
+
     <string name="initial_time">00:00</string>
 </resources>

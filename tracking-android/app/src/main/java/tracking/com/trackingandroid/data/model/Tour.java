@@ -6,6 +6,8 @@ import java.util.List;
 
 public class Tour {
     @Expose
+    private Integer tourId;
+    @Expose
     private String timeStart;
     @Expose
     private String timeFinish;
@@ -16,6 +18,14 @@ public class Tour {
         this.timeStart = timeStart;
         this.timeFinish = timeFinish;
         this.locations = locations;
+    }
+
+    public Integer getTourId() {
+        return tourId;
+    }
+
+    public void setTourId(Integer tourId) {
+        this.tourId = tourId;
     }
 
     public String getTimeStart() {

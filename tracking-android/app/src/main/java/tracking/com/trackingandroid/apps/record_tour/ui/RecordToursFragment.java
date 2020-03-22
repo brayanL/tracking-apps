@@ -60,6 +60,8 @@ import tracking.com.trackingandroid.apps.record_tour.RecordToursPresenter;
 import tracking.com.trackingandroid.data.model.Tour;
 import tracking.com.trackingandroid.util.CommonUtils;
 
+import static tracking.com.trackingandroid.util.CommonUtils.COMPLETE_DATE_FORMAT;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -79,7 +81,7 @@ public class RecordToursFragment extends Fragment implements OnMapReadyCallback,
     private LocationRequest mLocationRequest;
     private List<tracking.com.trackingandroid.data.model.Location> locationList = new ArrayList<>();
     private tracking.com.trackingandroid.data.model.Location location;
-    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    private DateFormat dateFormat = new SimpleDateFormat(COMPLETE_DATE_FORMAT);
     private DialogLoading dialogLoading;
 
     @Inject

@@ -1,6 +1,6 @@
 package tracking.com.trackingandroid.data;
 
-import android.util.Log;
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.Response;
@@ -35,6 +35,10 @@ public class DataManager {
 
     public Observable<Tour> createTour(Tour tour) {
         return trackingService.createTour(tour);
+    }
+
+    public Observable<List<Tour>> getTours() {
+        return trackingService.getTours();
     }
 
     public void putString(String key, String value) {

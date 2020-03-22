@@ -9,6 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -70,6 +71,9 @@ dependencies {
     //google play services and google maps
     implementation "com.google.android.gms:play-services-location:$rootProject.ext.googlePlayServices"
     implementation "com.google.android.gms:play-services-maps:$rootProject.ext.playServicesMap"
+
+    //time
+    implementation "joda-time:joda-time:$rootProject.ext.joda"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

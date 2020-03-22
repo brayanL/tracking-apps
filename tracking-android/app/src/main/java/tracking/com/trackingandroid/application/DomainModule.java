@@ -65,6 +65,7 @@ public class DomainModule {
         OkHttpClient customOkHttpClient = httpClientBuilder.build();
 
         final GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.excludeFieldsWithoutExposeAnnotation();
 
         return new Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
