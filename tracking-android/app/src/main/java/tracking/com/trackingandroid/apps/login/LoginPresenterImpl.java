@@ -24,6 +24,7 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void login(String username, String password) {
+        loginView.showProgress();
         dataManager.login(username, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -36,6 +37,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                     @Override
                     public void onNext(Response<Void> voidResponse) {
                         Log.d(TAG, "RESPONSE: " + voidResponse.headers().get("Authorization"));
+                        loginView.hideProgress();
                         if (voidResponse.headers().get("Authorization") != null) {
                             dataManager.putString(PreferencesHelper.TOKEN,
                                     voidResponse.headers().get("Authorization"));
@@ -51,6 +53,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                     @Override
                     public void onError(Throwable e) {
                         Log.e(TAG, "onError Tracking: " + e.toString());
+                        loginView.hideProgress();
                     }
 
                     @Override

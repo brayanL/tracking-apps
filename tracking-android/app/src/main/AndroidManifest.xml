@@ -18,8 +18,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,9 +28,20 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".apps.tours.ui.TourDetailActivity"
+            android:parentActivityName=".main.MainActivity"
             android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".main.MainActivity"/>
+        </activity>
+        <activity
             android:name=".main.DrawerActivity"
+            android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAPjw6dxI1rwc_x21C7l6d2_LHcsO5FWr0" />

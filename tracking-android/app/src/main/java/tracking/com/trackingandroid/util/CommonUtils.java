@@ -9,6 +9,7 @@ import android.widget.Toast;
 public class CommonUtils {
     public static final String COMPLETE_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     public static final String SIMPLE_DATE_FORMAT = "yyyy-MM-dd";
+    public static final String TOURS_MOVIE_DETAIL = "TOURS_MOVIE_DETAIL";
 
     public static void showSimpleToastMessages(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();

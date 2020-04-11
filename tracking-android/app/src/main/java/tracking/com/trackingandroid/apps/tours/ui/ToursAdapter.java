@@ -1,7 +1,9 @@
 package tracking.com.trackingandroid.apps.tours.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +30,7 @@ import tracking.com.trackingandroid.data.model.Tour;
 
 import static tracking.com.trackingandroid.util.CommonUtils.COMPLETE_DATE_FORMAT;
 import static tracking.com.trackingandroid.util.CommonUtils.SIMPLE_DATE_FORMAT;
+import static tracking.com.trackingandroid.util.CommonUtils.TOURS_MOVIE_DETAIL;
 
 public class ToursAdapter extends RecyclerView.Adapter<ToursAdapter.CustomViewHolder> {
     private List<Tour> tourList;
@@ -64,6 +67,12 @@ public class ToursAdapter extends RecyclerView.Adapter<ToursAdapter.CustomViewHo
             customViewHolder.textId.setText(tour.getTourId().toString());
             customViewHolder.textTimeTravel.setText(String.format("%s:%s:%s", hh, mm, ss));
             customViewHolder.textDate.setText(simpleDateFormat.format(completeDateFormat.parse(tour.getTimeStart())));
+
+            customViewHolder.cardTour.setOnClickListener(v -> {
+                Intent intent =new Intent(context, TourDetailActivity.class);
+                intent.putExtra(TOURS_MOVIE_DETAIL, tour);
+                v.getContext().startActivity(intent);
+            });
         } catch (ParseException e) {
             Log.i(TAG, "PARSE_ERROR: " + e.toString());
         }
@@ -83,6 +92,7 @@ public class ToursAdapter extends RecyclerView.Adapter<ToursAdapter.CustomViewHo
         @BindView(R.id.text_id) TextView textId;
         @BindView(R.id.text_time_travel) TextView textTimeTravel;
         @BindView(R.id.text_date) TextView textDate;
+        @BindView(R.id.card_tour) CardView cardTour;
 
         Unbinder unbinder;
 

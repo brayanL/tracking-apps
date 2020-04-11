@@ -19,6 +19,7 @@ import butterknife.OnClick;
 import dagger.android.support.AndroidSupportInjection;
 import tracking.com.trackingandroid.R;
 import tracking.com.trackingandroid.apps.login.LoginPresenter;
+import tracking.com.trackingandroid.apps.record_tour.ui.DialogLoading;
 import tracking.com.trackingandroid.main.DrawerActivity;
 
 public class LoginFragment extends Fragment implements LoginView {
@@ -28,10 +29,10 @@ public class LoginFragment extends Fragment implements LoginView {
     @Inject
     Context context;
 
-    @BindView(R.id.username)
-    EditText username;
-    @BindView(R.id.password)
-    EditText password;
+    @BindView(R.id.username) EditText username;
+    @BindView(R.id.password) EditText password;
+
+    private DialogLoading dialogLoading;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -42,6 +43,7 @@ public class LoginFragment extends Fragment implements LoginView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+        dialogLoading = new DialogLoading(getActivity());
         ButterKnife.bind(this, view);
         return view;
     }
@@ -71,5 +73,13 @@ public class LoginFragment extends Fragment implements LoginView {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void showProgress() {
+        dialogLoading.startLoadingDialog();
+    }
 
+    @Override
+    public void hideProgress() {
+        dialogLoading.dismissLoadingDialog();
+    }
 }
