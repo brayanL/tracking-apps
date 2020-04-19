@@ -13,7 +13,7 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import tracking.com.trackingandroid.R;
 import tracking.com.trackingandroid.apps.login.ui.LoginFragment;
-import tracking.com.trackingandroid.apps.register.RegisterFragment;
+import tracking.com.trackingandroid.apps.register.ui.RegisterFragment;
 
 public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
 

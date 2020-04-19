@@ -1,19 +1,25 @@
 package com.tracking.tracking.controler;
 
+import com.tracking.tracking.entity.Tour;
+import com.tracking.tracking.entity.User;
+import com.tracking.tracking.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/authenticate")
 public class Authenticate {
 
-    @GetMapping("/register")
-    public @ResponseBody ResponseEntity<String> showMessage() {
-        return new ResponseEntity<String>("Here from trusted source", HttpStatus.OK);
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/register")
+    public @ResponseBody ResponseEntity<User> showMessage(@NonNull @RequestBody User user) {
+        return ResponseEntity.ok(userService.registerUser(user));
     }
 
 }

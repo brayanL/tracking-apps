@@ -9,6 +9,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import tracking.com.trackingandroid.data.model.LoginUser;
 import tracking.com.trackingandroid.data.model.Tour;
+import tracking.com.trackingandroid.data.model.User;
 
 public interface TrackingService {
 
@@ -20,4 +21,7 @@ public interface TrackingService {
 
     @GET("/tour/list")
     Observable<List<Tour>> getTours();
+
+    @POST("/authenticate/register")
+    Observable<User> registerUser(@Body User user);
 }

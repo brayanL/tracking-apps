@@ -35,7 +35,6 @@ public class ToursPresenterImpl implements ToursPresenter {
 
                     @Override
                     public void onNext(List<Tour> tourList) {
-                        // Log.i(TAG, "List Tour: " + Arrays.toString(tourList.toArray()));
                         toursView.showTours(tourList);
                     }
 

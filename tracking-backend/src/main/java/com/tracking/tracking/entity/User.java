@@ -13,6 +13,9 @@ public class User {
     @Column(name="username", unique = true)
     private String username;
 
+    @Column(name="fullname")
+    private String fullname;
+
     @Column(name="password")
     private String password;
 
@@ -20,7 +23,7 @@ public class User {
     private byte rol;
 
     @Column(name="active")
-    private boolean active;
+    private boolean active = true;
 
     public long getId() {
         return userId;
@@ -36,6 +39,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public String getPassword() {

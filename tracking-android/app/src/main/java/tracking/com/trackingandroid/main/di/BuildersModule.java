@@ -9,6 +9,9 @@ import tracking.com.trackingandroid.apps.login.ui.LoginFragment;
 import tracking.com.trackingandroid.apps.record_tour.di.RecordToursModule;
 import tracking.com.trackingandroid.apps.record_tour.di.RecordToursViewModule;
 import tracking.com.trackingandroid.apps.record_tour.ui.RecordToursFragment;
+import tracking.com.trackingandroid.apps.register.di.RegisterModule;
+import tracking.com.trackingandroid.apps.register.di.RegisterViewModule;
+import tracking.com.trackingandroid.apps.register.ui.RegisterFragment;
 import tracking.com.trackingandroid.apps.tours.di.ToursModule;
 import tracking.com.trackingandroid.apps.tours.di.ToursViewModule;
 import tracking.com.trackingandroid.apps.tours.ui.ToursFragment;
@@ -36,5 +39,8 @@ public abstract class BuildersModule {
 
     @ContributesAndroidInjector(modules = {DomainModule.class, ToursModule.class, ToursViewModule.class})
     abstract ToursFragment bindToursFragment();
+
+    @ContributesAndroidInjector(modules = {DomainModule.class, RegisterModule.class, RegisterViewModule.class})
+    abstract RegisterFragment bindRegisterFragment();
 
 }

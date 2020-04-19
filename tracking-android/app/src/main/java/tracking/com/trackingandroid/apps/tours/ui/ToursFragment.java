@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,7 @@ public class ToursFragment extends Fragment implements ToursView {
 
     @BindView(R.id.recycler_tours) RecyclerView recyclerViewTours;
     @BindView(R.id.progress_bar_tours) ProgressBar progressBar;
+    @BindView(R.id.empty_view) TextView emptyView;
 
     private ToursAdapter toursAdapter;
     private Unbinder unbinder;
@@ -69,14 +71,15 @@ public class ToursFragment extends Fragment implements ToursView {
         super.onDestroyView();
         unbinder.unbind();
         toursPresenter.onDestroy();
-        Log.i("TOUR_TAG", "Fragment Destroyed");
     }
 
     @Override
     public void showTours(List<Tour> tourList) {
+        if (tourList.isEmpty()) {
+            emptyView.setVisibility(View.VISIBLE);
+        }
         toursAdapter.updateToursAdapter(tourList);
         progressBar.setVisibility(View.GONE);
-        // Log.i("TOUR_TAG", Arrays.toString(tourList.toArray()));
     }
 
     private void setupAdapter() {
