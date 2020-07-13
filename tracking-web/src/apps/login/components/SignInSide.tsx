@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     Avatar,
     Button,
@@ -10,6 +10,7 @@ import {
     Grid,
     Typography,
     CssBaseline,
+    CircularProgress,
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
@@ -17,6 +18,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 import { Credentials, startLogin } from '../slices/loginSlice';
+import { RootState } from '../../../store/reducers';
 
 function Copyright() {
     return (
@@ -71,12 +73,9 @@ const loginSchema: yup.ObjectSchema<Credentials> = yup.object({
 export default function SignInSide() {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const login = useSelector((state: RootState) => state.login);
 
-    const {
-        register, handleSubmit, errors,
-    } = useForm({
-        validationSchema: loginSchema,
-    });
+    const { register, handleSubmit, errors } = useForm({ validationSchema: loginSchema });
 
     const onSubmit = handleSubmit(({ username, password }) => {
         dispatch(startLogin({ username, password }));
@@ -119,15 +118,26 @@ export default function SignInSide() {
                             error={errors?.hasOwnProperty('password')}
                             helperText={errors.password?.message}
                         />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                        >
-                            Sign In
-                        </Button>
+                        {login.loading ? (
+                            <Button
+                                variant="contained"
+                                fullWidth
+                                color="primary"
+                                style={{ marginTop: 24, marginBottom: 16 }}
+                            >
+                                <CircularProgress color="secondary" size={25} />
+                            </Button>
+                        ) : (
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                            >
+                                Sign In
+                            </Button>
+                        )}
                         <Grid container>
                             <Grid item xs>
                                 <Link href="#" variant="body2">

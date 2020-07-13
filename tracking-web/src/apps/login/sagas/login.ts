@@ -1,14 +1,13 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 
-import { startLogin, failedLogin } from '../slices/loginSlice';
+import { startLogin, failedLogin, successLogin } from '../slices/loginSlice';
 
 function* startLoginSaga({ payload }) {
     try {
-        const { data } = yield axios.post(process.env.REACT_APP_LOGIN!, payload);
-        console.log('data:', data);
+        const response = yield axios.post(process.env.REACT_APP_LOGIN!, payload);
+        yield put(successLogin({ token: response?.headers['authorization'] }));
     } catch (e) {
-        console.log('Error:', e);
         yield put(failedLogin(e?.message));
     }
 }

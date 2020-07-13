@@ -1,5 +1,7 @@
-/* eslint-disable no-undef,consistent-return,global-require */
+/* eslint-disable global-require,prefer-const,import/no-mutable-exports */
 import createSagaMiddleware from 'redux-saga';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './reducers';
 import rootSaga from './sagas';
@@ -7,25 +9,17 @@ import rootSaga from './sagas';
 // create the saga middleware
 const sagaMiddleware = createSagaMiddleware();
 
-const localStorageMiddleware = ({ getState }) => (next) => (action) => {
-    const result = next(action);
-    localStorage.setItem('applicationState', JSON.stringify(
-        getState(),
-    ));
-    return result;
+// redux persist
+const persistConfig = {
+    key: 'root',
+    storage,
 };
 
-const reHydrateStore = () => {
-    if (localStorage.getItem('applicationState') !== null) {
-        // @ts-ignore
-        return JSON.parse(localStorage.getItem('applicationState')); // re-hydrate the store
-    }
-};
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
-    reducer: rootReducer,
-    middleware: [sagaMiddleware, localStorageMiddleware],
-    preloadedState: reHydrateStore(),
+    reducer: persistedReducer,
+    middleware: [sagaMiddleware],
 });
 
 if (process.env.NODE_ENV === 'development' && module.hot) {
@@ -38,4 +32,6 @@ if (process.env.NODE_ENV === 'development' && module.hot) {
 // run saga
 sagaMiddleware.run(rootSaga);
 
-export default store;
+let persistor = persistStore(store);
+
+export { store, persistor };
