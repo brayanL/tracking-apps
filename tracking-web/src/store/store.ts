@@ -22,12 +22,12 @@ const store = configureStore({
     middleware: [sagaMiddleware],
 });
 
-if (process.env.NODE_ENV === 'development' && module.hot) {
+/* if (process.env.NODE_ENV === 'development' && module.hot) {
     module.hot.accept('./reducers', () => {
         const newRootReducer = require('./reducers').default;
         store.replaceReducer(newRootReducer);
     });
-}
+} */
 
 // run saga
 sagaMiddleware.run(rootSaga);

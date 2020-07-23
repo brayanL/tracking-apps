@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     Avatar,
@@ -16,23 +16,11 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
+import PropTypes from 'prop-types';
 
 import { Credentials, startLogin } from '../slices/loginSlice';
 import { RootState } from '../../../store/reducers';
-
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Tracking App
-            </Link>
-            {' '}
-            {new Date().getFullYear()}
-            .
-        </Typography>
-    );
-}
+import Copyright from '../../common/Copyright';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -70,12 +58,18 @@ const loginSchema: yup.ObjectSchema<Credentials> = yup.object({
     password: yup.string().required('Este campo es requerido'),
 }).defined();
 
-export default function SignInSide() {
+export default function SignInSide({ history }) {
     const classes = useStyles();
     const dispatch = useDispatch();
     const login = useSelector((state: RootState) => state.login);
 
     const { register, handleSubmit, errors } = useForm({ validationSchema: loginSchema });
+
+    useEffect(() => {
+        if (login.isSuccess) {
+            history.push('/dashboard');
+        }
+    }, [login.isSuccess]);
 
     const onSubmit = handleSubmit(({ username, password }) => {
         dispatch(startLogin({ username, password }));
@@ -159,3 +153,9 @@ export default function SignInSide() {
         </Grid>
     );
 }
+
+SignInSide.propTypes = {
+    history: PropTypes.shape({
+        push: PropTypes.func.isRequired,
+    }).isRequired,
+};

@@ -12,13 +12,15 @@ interface LoginData {
 interface LoginState {
     loading: boolean,
     data: object,
-    isError: boolean
+    errorMessage: string,
+    isSuccess: boolean
 }
 
 const initialState: LoginState = {
     loading: false,
     data: {},
-    isError: false,
+    errorMessage: '',
+    isSuccess: false,
 };
 
 const loginSlice = createSlice({
@@ -31,12 +33,12 @@ const loginSlice = createSlice({
         successLogin(state, action: PayloadAction<LoginData>) {
             state.loading = false;
             state.data = action.payload;
-            state.isError = false;
+            state.isSuccess = true;
         },
         failedLogin(state, action) {
             state.loading = false;
-            state.data = action.payload;
-            state.isError = true;
+            state.errorMessage = action.payload;
+            state.isSuccess = false;
         },
     },
 });
