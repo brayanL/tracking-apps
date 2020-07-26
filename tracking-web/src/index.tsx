@@ -2,6 +2,8 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { PersistGate } from 'redux-persist/integration/react';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
 import './index.css';
 import * as serviceWorker from './serviceWorker';
@@ -9,13 +11,13 @@ import App from './App';
 import { store, persistor } from './store/store';
 
 ReactDOM.render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
+    <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <App />
-            </PersistGate>
-        </Provider>
-    </React.StrictMode>,
+            </MuiPickersUtilsProvider>
+        </PersistGate>
+    </Provider>,
     document.getElementById('root'),
 );
 

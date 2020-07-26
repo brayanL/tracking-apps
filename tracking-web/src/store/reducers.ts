@@ -1,9 +1,11 @@
 /* eslint-disable no-param-reassign */
 import { combineReducers } from 'redux';
 import loginReducer from '../apps/login/slices/loginSlice';
+import reportsReducer from '../apps/reports/slices/reportsSlice';
 
 const appReducers = combineReducers({
     login: loginReducer,
+    reports: reportsReducer,
 });
 
 /**

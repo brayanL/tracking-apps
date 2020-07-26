@@ -67,7 +67,7 @@ export default function SignInSide({ history }) {
 
     useEffect(() => {
         if (login.isSuccess) {
-            history.push('/dashboard');
+            history.push('/reports/advanced');
         }
     }, [login.isSuccess]);
 
