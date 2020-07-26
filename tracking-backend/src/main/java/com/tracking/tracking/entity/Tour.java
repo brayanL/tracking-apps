@@ -26,6 +26,7 @@ public class Tour implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private String timeTravel;
 
     @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL)
     @JsonManagedReference
@@ -62,6 +63,14 @@ public class Tour implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getTimeTravel() {
+        return timeTravel;
+    }
+
+    public void setTimeTravel(String timeTravel) {
+        this.timeTravel = timeTravel;
     }
 
     public List<Location> getLocations() {

@@ -1,13 +1,25 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import SignInSide from '../apps/login/components/SignInSide';
-import Dashboard from '../apps/theme/Dashboard';
+import Dashboard from '../apps/dashboard/Dashboard';
+import ReportAdvanced from '../apps/reports/components/ReportAdvanced';
+import RouteWithLayout from './RouteWithLayout';
+import MainLayout from '../layouts/MainLayout';
 
 export default function Routes() {
     return (
         <Switch>
             <Route exact path="/login" component={SignInSide} />
-            <Route exact path="/dashboard" component={Dashboard} />
+            <RouteWithLayout
+                layout={MainLayout}
+                path="/dashboard"
+                component={Dashboard}
+            />
+            <RouteWithLayout
+                layout={MainLayout}
+                path="/reports/advanced"
+                component={ReportAdvanced}
+            />
         </Switch>
     );
 }
