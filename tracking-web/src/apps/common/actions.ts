@@ -1,5 +1,18 @@
-export const START_ADVANCED_REPORTS = 'START_ADVANCED_REPORTS';
+import {
+    CommonActionTypes, DatesPayload,
+    SET_ERROR, START_ADVANCED_REPORTS,
+} from './types';
 
-export const startAdvancedReports = () => ({
-    type: START_ADVANCED_REPORTS,
-});
+export function startAdvancedReports(dates: DatesPayload): CommonActionTypes {
+    return {
+        type: START_ADVANCED_REPORTS,
+        payload: dates,
+    };
+}
+
+export function setError(error: string): CommonActionTypes {
+    return {
+        type: SET_ERROR,
+        payload: error,
+    };
+}

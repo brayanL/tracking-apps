@@ -4,12 +4,18 @@ import { Grid, Typography } from '@material-ui/core';
 import MaterialTable from 'material-table';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import moment from 'moment';
+
 import { startAdvancedReports } from '../../common/actions';
 import { RootState } from '../../../store/reducers';
+import { DATE_FORMAT } from '../../../utils/Constants';
+import { handleSaveToPC } from '../../../utils/CommonUtils';
 
 export default function ReportAdvanced() {
-    const [selectedDateFrom, setDateFrom] = React.useState<MaterialUiPickersDate>(new Date());
-    const [selectedDateTo, setDateTo] = React.useState<MaterialUiPickersDate>(new Date());
+    const dateOneMonthAgo = new Date();
+    dateOneMonthAgo.setMonth(dateOneMonthAgo.getMonth() - 1);
+    const [fromDate, setDateFrom] = React.useState<MaterialUiPickersDate>(dateOneMonthAgo);
+    const [toDate, setDateTo] = React.useState<MaterialUiPickersDate>(new Date());
 
     const reportsData = useSelector((state: RootState) => state.reports.advanced);
     const tableData = JSON.parse(JSON.stringify(reportsData));
@@ -17,8 +23,18 @@ export default function ReportAdvanced() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(startAdvancedReports());
+        dispatch(startAdvancedReports({
+            fromDate: moment(fromDate).format(DATE_FORMAT),
+            toDate: moment(toDate).format(DATE_FORMAT),
+        }));
     }, []);
+
+    useEffect(() => {
+        dispatch(startAdvancedReports({
+            fromDate: moment(fromDate).format(DATE_FORMAT),
+            toDate: moment(toDate).format(DATE_FORMAT),
+        }));
+    }, [fromDate, toDate]);
 
     return (
         <Grid container spacing={4} direction="column">
@@ -34,7 +50,7 @@ export default function ReportAdvanced() {
                             inputVariant="outlined"
                             label="Desde"
                             format="dd/MM/yyyy"
-                            value={selectedDateFrom}
+                            value={fromDate}
                             onChange={(date) => setDateFrom(date)}
                         />
                     </Grid>
@@ -45,7 +61,7 @@ export default function ReportAdvanced() {
                             inputVariant="outlined"
                             label="Hasta"
                             format="dd/MM/yyyy"
-                            value={selectedDateTo}
+                            value={toDate}
                             onChange={(date) => setDateTo(date)}
                         />
                     </Grid>
@@ -60,12 +76,16 @@ export default function ReportAdvanced() {
                             { title: 'Inicio', field: 'timeStart' },
                             { title: 'Fin', field: 'timeFinish' },
                             { title: 'Tiempo Recorrido', field: 'timeTravel' },
+                            { title: 'Distancia Recorrida', field: 'distanceBetween' },
                         ]}
                         data={tableData}
                         options={{
                             search: false,
                             draggable: false,
                             exportButton: true,
+                            exportCsv: (columns, data) => {
+                                handleSaveToPC(data);
+                            },
                             rowStyle: (x) => {
                                 if (x.tableData.id % 2) {
                                     return { backgroundColor: '#c4d9f2', color: '#518CBF' };

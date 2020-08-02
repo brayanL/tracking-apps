@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.SystemClock;
@@ -46,6 +47,7 @@ import com.google.android.gms.tasks.Task;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -190,7 +192,14 @@ public class RecordToursFragment extends Fragment implements OnMapReadyCallback,
                     chronometer.setText(R.string.initial_time);
                     timerContainer.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                     timeFinish = dateFormat.format(new Date());
-                    presenter.createTour(new Tour(timeStart, timeFinish, locationList));
+                    // get distance between
+                    float [] results = new float[1];
+                    Location.distanceBetween(Double.parseDouble(locationList.get(0).getLatitud()),
+                            Double.parseDouble(locationList.get(0).getLongitud()),
+                            Double.parseDouble(locationList.get(locationList.size() -1).getLatitud()),
+                            Double.parseDouble(locationList.get(locationList.size() -1).getLongitud()),
+                            results);
+                    presenter.createTour(new Tour(timeStart, timeFinish, locationList, results[0]));
                 }
             }
         }

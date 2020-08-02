@@ -8,3 +8,13 @@ export const checkEmptyObject = (object) => {
     }
     return Object.keys(object).length === 0;
 };
+
+export const handleSaveToPC = (jsonData) => {
+    const fileData = JSON.stringify(jsonData);
+    const blob = new Blob([fileData], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = 'tours.json';
+    link.href = url;
+    link.click();
+};

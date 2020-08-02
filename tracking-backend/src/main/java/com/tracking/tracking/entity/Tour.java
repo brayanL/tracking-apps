@@ -28,6 +28,8 @@ public class Tour implements Serializable {
 
     private String timeTravel;
 
+    private Float distanceBetween;
+
     @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Location> locations = new ArrayList<>();
@@ -67,6 +69,14 @@ public class Tour implements Serializable {
 
     public String getTimeTravel() {
         return timeTravel;
+    }
+
+    public Float getDistanceBetween() {
+        return distanceBetween;
+    }
+
+    public void setDistanceBetween(Float distanceBetween) {
+        this.distanceBetween = distanceBetween;
     }
 
     public void setTimeTravel(String timeTravel) {

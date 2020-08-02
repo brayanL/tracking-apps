@@ -15,11 +15,14 @@ public class Tour implements Serializable {
     private String timeFinish;
     @Expose
     private List<Location> locations;
+    @Expose
+    private Float distanceBetween;
 
-    public Tour(String timeStart, String timeFinish, List<Location> locations) {
+    public Tour(String timeStart, String timeFinish, List<Location> locations, Float distanceBetween) {
         this.timeStart = timeStart;
         this.timeFinish = timeFinish;
         this.locations = locations;
+        this.distanceBetween = distanceBetween;
     }
 
     public Integer getTourId() {
@@ -52,6 +55,14 @@ public class Tour implements Serializable {
 
     public void setLocations(List<Location> locations) {
         this.locations = locations;
+    }
+
+    public Float getDistanceBetween() {
+        return distanceBetween;
+    }
+
+    public void setDistanceBetween(Float distanceBetween) {
+        this.distanceBetween = distanceBetween;
     }
 
     @Override

@@ -1,17 +1,21 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { START_ADVANCED_REPORTS } from '../../common/actions';
 import api from '../../../utils/Api';
 import { showAdvancedReport } from '../slices/reportsSlice';
+import { START_ADVANCED_REPORTS, StartAdvancedReportAction } from '../../common/types';
+import { setError } from '../../common/actions';
+import { GENERIC_MESSAGE_ERROR } from '../../../utils/Constants';
 
-const fetchAdvancedReports = () => api.get(process.env.REACT_APP_BASE_URL!
-    .concat('/reports/tours/range-date'), { params: { fromDate: '2020-07-24T01:45:00', toDate: '2020-07-24T02:55:00' } });
+const fetchAdvancedReports = (fromDate, toDate) => api.get(process.env.REACT_APP_BASE_URL!
+    .concat('/reports/tours/range-date'), { params: { fromDate, toDate } });
 
-function* advancedReportsSaga() {
+function* advancedReportsSaga(startDateAction: StartAdvancedReportAction) {
     try {
-        const response = yield call(fetchAdvancedReports);
+        const response = yield call(fetchAdvancedReports,
+            startDateAction.payload.fromDate,
+            startDateAction.payload.toDate);
         yield put(showAdvancedReport(response.data));
     } catch (e) {
-        console.log('error: ', e);
+        yield put(setError(e?.message || GENERIC_MESSAGE_ERROR));
     }
 }
 
