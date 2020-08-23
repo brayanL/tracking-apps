@@ -32,7 +32,7 @@ public interface TourRepository extends JpaRepository<Tour, Serializable> {
     List<ITourPerMonth> getTourPerMonth(Integer year);
 
 
-    @Query(value = "SELECT FUNCTION('MONTH', t.timeFinish) as month, t.timeTravel as timeTraveled FROM Tour t WHERE FUNCTION('YEAR', t.timeFinish) = :year GROUP BY month, timeTraveled")
+    @Query(value = "SELECT FUNCTION('MONTH', t.timeFinish) as month, SUM(t.timeTravel) as timeTraveled FROM Tour t WHERE FUNCTION('YEAR', t.timeFinish) = :year GROUP BY month")
     List<ITimeTraveled> getTimeTraveled(Integer year);
 
 }

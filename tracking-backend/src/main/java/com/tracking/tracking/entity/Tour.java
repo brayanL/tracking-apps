@@ -26,7 +26,7 @@ public class Tour implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String timeTravel;
+    private Long timeTravel;
 
     private Float distanceBetween;
 
@@ -67,10 +67,6 @@ public class Tour implements Serializable {
         this.user = user;
     }
 
-    public String getTimeTravel() {
-        return timeTravel;
-    }
-
     public Float getDistanceBetween() {
         return distanceBetween;
     }
@@ -79,7 +75,11 @@ public class Tour implements Serializable {
         this.distanceBetween = distanceBetween;
     }
 
-    public void setTimeTravel(String timeTravel) {
+    public Long getTimeTravel() {
+        return timeTravel;
+    }
+
+    public void setTimeTravel(Long timeTravel) {
         this.timeTravel = timeTravel;
     }
 
