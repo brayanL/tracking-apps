@@ -1,7 +1,9 @@
 package com.tracking.tracking.repository;
 
 import com.tracking.tracking.entity.Tour;
-import org.joda.time.DateTime;
+import com.tracking.tracking.pojo.IDistanceBetween;
+import com.tracking.tracking.pojo.ITimeTraveled;
+import com.tracking.tracking.pojo.ITourPerMonth;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.Temporal;
@@ -22,4 +24,15 @@ public interface TourRepository extends JpaRepository<Tour, Serializable> {
     List<Tour> showToursByRangeDate(String username,
                                     @Temporal(TemporalType.TIMESTAMP) Date fromDate,
                                     @Temporal(TemporalType.TIMESTAMP) Date toDate);
+
+    @Query(value = "SELECT FUNCTION('MONTH', t.timeFinish) as month, SUM(t.distanceBetween) as distanceBetween from Tour t WHERE FUNCTION('YEAR', t.timeFinish) = :year GROUP BY month")
+    List<IDistanceBetween> getDistanceBetween(Integer year);
+
+    @Query(value = "SELECT FUNCTION('MONTH', t.timeFinish) as month, COUNT(t.timeFinish) as totalTrips FROM Tour t WHERE FUNCTION('YEAR', t.timeFinish) = :year GROUP BY month")
+    List<ITourPerMonth> getTourPerMonth(Integer year);
+
+
+    @Query(value = "SELECT FUNCTION('MONTH', t.timeFinish) as month, t.timeTravel as timeTraveled FROM Tour t WHERE FUNCTION('YEAR', t.timeFinish) = :year GROUP BY month, timeTraveled")
+    List<ITimeTraveled> getTimeTraveled(Integer year);
+
 }

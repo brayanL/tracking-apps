@@ -1,10 +1,8 @@
 package com.tracking.tracking.controler;
 
 import com.tracking.tracking.entity.Tour;
+import com.tracking.tracking.pojo.DashBoardReport;
 import com.tracking.tracking.repository.TourRepository;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -16,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 @RestController
@@ -36,5 +34,17 @@ public class ReportsController {
                 completeDateFormat.parse(fromDate),
                 completeDateFormat.parse(toDate));
         return ResponseEntity.ok(tourList);
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<DashBoardReport> getDashboard() {
+        Integer currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+        DashBoardReport dashBoardReport = new DashBoardReport();
+        dashBoardReport.setDistanceBetween(tourRepository.getDistanceBetween(currentYear));
+        dashBoardReport.setTourPerMonth(tourRepository.getTourPerMonth(currentYear));
+        dashBoardReport.setTimeTraveled(tourRepository.getTimeTraveled(currentYear));
+
+        return ResponseEntity.ok(dashBoardReport);
     }
 }

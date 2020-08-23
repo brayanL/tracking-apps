@@ -51,6 +51,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter implements WebMvcC
     }
 
     @Override
+    public void configure(org.springframework.security.config.annotation.web.builders.WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/authenticate/register");
+    }
+
+    @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedMethods("GET", "POST").exposedHeaders("Authorization");
