@@ -18,14 +18,22 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItem from '@material-ui/core/ListItem';
+import { useHistory } from 'react-router-dom';
 
-import { mainListItems, secondaryListItems } from '../apps/theme/listItems';
 import mainLayoutStyles from './main-layout-style';
 import Copyright from '../apps/common/Copyright';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import PeopleIcon from '@material-ui/icons/People';
 
 export default function MainLayout({ children }) {
     const classes = mainLayoutStyles();
     const [open, setOpen] = React.useState(true);
+
+    const history = useHistory();
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -81,9 +89,26 @@ export default function MainLayout({ children }) {
                     </IconButton>
                 </div>
                 <Divider />
-                <List>{mainListItems}</List>
-                <Divider />
-                <List>{secondaryListItems}</List>
+                <List>
+                    <ListItem button onClick={() => history.push('/dashboard')}>
+                        <ListItemIcon>
+                            <DashboardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Dashboard" />
+                    </ListItem>
+                    <ListItem button>
+                        <ListItemIcon>
+                            <ShoppingCartIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Orders" />
+                    </ListItem>
+                    <ListItem button>
+                        <ListItemIcon>
+                            <PeopleIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Customers" />
+                    </ListItem>
+                </List>
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />

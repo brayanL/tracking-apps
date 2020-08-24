@@ -1,4 +1,5 @@
 export const START_ADVANCED_REPORTS = 'START_ADVANCED_REPORTS';
+export const START_GET_DASHBOARD = 'START_GET_DASHBOARD';
 
 // errors
 export const SET_ERROR = 'SET_ERROR';
@@ -14,9 +15,13 @@ export interface StartAdvancedReportAction {
     payload: DatesPayload
 }
 
+export interface ShowDashboardAction {
+    type: typeof START_GET_DASHBOARD
+}
+
 interface ErrorAction {
     type: typeof SET_ERROR
     payload: string
 }
 
-export type CommonActionTypes = StartAdvancedReportAction | ErrorAction;
+export type CommonActionTypes = StartAdvancedReportAction | ErrorAction | ShowDashboardAction;
