@@ -1,13 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { DistanceBetween } from '../../../types/DistanceBetween';
+import { TourPerMonth } from '../../../types/TourPerMonth';
+import { TimeTraveled } from '../../../types/TimeTraveled';
+
+interface Dashboard {
+    distanceBetween: Array<DistanceBetween>,
+    tourPerMonth: Array<TourPerMonth>,
+    timeTraveled: Array<TimeTraveled>
+}
 
 interface AdvancedReportState {
     advanced: Array<object>,
-    dashboard: Object,
+    dashboard: Dashboard,
 }
 
 const initialState: AdvancedReportState = {
     advanced: [],
-    dashboard: {},
+    dashboard: {
+        distanceBetween: [],
+        tourPerMonth: [],
+        timeTraveled: [],
+    },
 };
 
 const reportsSlice = createSlice({
