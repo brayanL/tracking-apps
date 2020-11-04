@@ -2,6 +2,9 @@ package com.tracking.tracking.controler;
 
 import com.tracking.tracking.entity.Tour;
 import com.tracking.tracking.pojo.DashBoardReport;
+import com.tracking.tracking.pojo.IDistanceBetween;
+import com.tracking.tracking.pojo.ITimeTraveled;
+import com.tracking.tracking.pojo.ITourPerMonth;
 import com.tracking.tracking.repository.TourRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,5 +49,20 @@ public class ReportsController {
         dashBoardReport.setTimeTraveled(tourRepository.getTimeTraveled(currentYear));
 
         return ResponseEntity.ok(dashBoardReport);
+    }
+
+    @GetMapping("/distanceBetween")
+    public ResponseEntity<List<IDistanceBetween>> getDistanceBetween(@RequestParam Integer year) {
+        return ResponseEntity.ok(tourRepository.getDistanceBetween(year));
+    }
+
+    @GetMapping("/tourPerMonth")
+    public ResponseEntity<List<ITourPerMonth>> getTourPerMonth(@RequestParam Integer year) {
+        return ResponseEntity.ok(tourRepository.getTourPerMonth(year));
+    }
+
+    @GetMapping("/timeTraveled")
+    public ResponseEntity<List<ITimeTraveled>> getTimeTraveled(@RequestParam Integer year) {
+        return ResponseEntity.ok(tourRepository.getTimeTraveled(year));
     }
 }

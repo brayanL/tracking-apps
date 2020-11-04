@@ -5,6 +5,7 @@ import Dashboard from '../apps/dashboard/Dashboard';
 import ReportAdvanced from '../apps/reports/components/ReportAdvanced';
 import RouteWithLayout from './RouteWithLayout';
 import MainLayout from '../layouts/MainLayout';
+import ReportDetail from '../apps/reports/components/ReportDetail';
 
 export default function Routes() {
     return (
@@ -19,6 +20,11 @@ export default function Routes() {
                 layout={MainLayout}
                 path="/reports/advanced"
                 component={ReportAdvanced}
+            />
+            <RouteWithLayout
+                layout={MainLayout}
+                path="/reports/detail"
+                component={ReportDetail}
             />
         </Switch>
     );

@@ -28,7 +28,7 @@ public interface TourRepository extends JpaRepository<Tour, Serializable> {
     @Query(value = "SELECT FUNCTION('MONTH', t.timeFinish) as month, SUM(t.distanceBetween) as distanceBetween from Tour t WHERE FUNCTION('YEAR', t.timeFinish) = :year GROUP BY month")
     List<IDistanceBetween> getDistanceBetween(Integer year);
 
-    @Query(value = "SELECT FUNCTION('MONTH', t.timeFinish) as month, COUNT(t.timeFinish) as totalTrips FROM Tour t WHERE FUNCTION('YEAR', t.timeFinish) = :year GROUP BY month")
+    @Query(value = "SELECT FUNCTION('MONTH', t.timeFinish) as month, COUNT(t.timeFinish) as tourPerMonth FROM Tour t WHERE FUNCTION('YEAR', t.timeFinish) = :year GROUP BY month")
     List<ITourPerMonth> getTourPerMonth(Integer year);
 
 

@@ -22,12 +22,12 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItem from '@material-ui/core/ListItem';
+import AssessmentIcon from '@material-ui/icons/Assessment';
+import PeopleIcon from '@material-ui/icons/People';
 import { useHistory } from 'react-router-dom';
 
 import mainLayoutStyles from './main-layout-style';
 import Copyright from '../apps/common/Copyright';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import PeopleIcon from '@material-ui/icons/People';
 
 export default function MainLayout({ children }) {
     const classes = mainLayoutStyles();
@@ -96,17 +96,17 @@ export default function MainLayout({ children }) {
                         </ListItemIcon>
                         <ListItemText primary="Dashboard" />
                     </ListItem>
-                    <ListItem button>
+                    <ListItem button onClick={() => history.push('/reports/advanced')}>
                         <ListItemIcon>
-                            <ShoppingCartIcon />
+                            <AssessmentIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Orders" />
+                        <ListItemText primary="Reporte Avanzado" />
                     </ListItem>
                     <ListItem button>
                         <ListItemIcon>
                             <PeopleIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Customers" />
+                        <ListItemText primary="Cerrar Sesión" />
                     </ListItem>
                 </List>
             </Drawer>

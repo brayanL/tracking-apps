@@ -3,12 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, AreaChart, Area,
 } from 'recharts';
-import { Button, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import * as moment from 'moment';
 import 'moment/locale/es';
 
 import { startDashboard } from '../common/actions';
 import { RootState } from '../../store/reducers';
+
+const DetailButton = () => (
+    <Grid item>
+        <Link to="/reports/detail">Detalles</Link>
+    </Grid>
+);
 
 export default function Dashboard() {
     const dispatch = useDispatch();
@@ -18,7 +25,7 @@ export default function Dashboard() {
     const timeTraveledReport = dashboard.timeTraveled
         .map(({ timeTraveled, month }) => ({ name: moment.months(month), timeTraveled }));
     const tourPerMonthReport = dashboard.tourPerMonth
-        .map(({ totalTrips, month }) => ({ name: moment.months(month), totalTrips }));
+        .map(({ tourPerMonth, month }) => ({ name: moment.months(month), tourPerMonth }));
 
     useEffect(() => {
         dispatch(startDashboard());
@@ -30,9 +37,7 @@ export default function Dashboard() {
                 <Grid container direction="column">
                     <Grid item xs={6}>
                         <Grid container direction="column" spacing={2}>
-                            <Grid item>
-                                <Button variant="contained">Detalles</Button>
-                            </Grid>
+                            <DetailButton />
                             <Grid item>
                                 <BarChart
                                     width={600}
@@ -54,9 +59,7 @@ export default function Dashboard() {
                     </Grid>
                     <Grid item xs={6}>
                         <Grid container direction="column" spacing={2}>
-                            <Grid item>
-                                <Button variant="contained">Detalles</Button>
-                            </Grid>
+                            <DetailButton />
                             <Grid item>
                                 <BarChart
                                     width={600}
@@ -71,7 +74,7 @@ export default function Dashboard() {
                                     <YAxis />
                                     <Tooltip />
                                     <Legend />
-                                    <Bar name="Viajes por mes" dataKey="totalTrips" fill="#66ccff" barSize={20} />
+                                    <Bar name="Viajes por mes" dataKey="tourPerMonth" fill="#66ccff" barSize={20} />
                                 </BarChart>
                             </Grid>
                         </Grid>
@@ -80,9 +83,7 @@ export default function Dashboard() {
             </Grid>
             <Grid container item xs={6} alignItems="center">
                 <Grid container direction="column" spacing={2}>
-                    <Grid item container justify="flex-end">
-                        <Button variant="contained">Detalles</Button>
-                    </Grid>
+                    <DetailButton />
                     <Grid item>
                         <AreaChart
                             width={500}
