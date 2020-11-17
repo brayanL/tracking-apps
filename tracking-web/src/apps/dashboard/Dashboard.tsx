@@ -10,12 +10,22 @@ import 'moment/locale/es';
 
 import { startDashboard } from '../common/actions';
 import { RootState } from '../../store/reducers';
+import TypeReportEnum from '../../utils/TypeReportEnum';
 
-const DetailButton = () => (
-    <Grid item>
-        <Link to="/reports/detail">Detalles</Link>
-    </Grid>
-);
+const DetailButton = ({ color, typeReport }) => {
+    return (
+        <Grid item>
+            <Link
+                to={{
+                    pathname: '/reports/detail',
+                    state: { typeReport, color },
+                }}
+            >
+                Detalles
+            </Link>
+        </Grid>
+    );
+};
 
 export default function Dashboard() {
     const dispatch = useDispatch();
@@ -37,7 +47,7 @@ export default function Dashboard() {
                 <Grid container direction="column">
                     <Grid item xs={6}>
                         <Grid container direction="column" spacing={2}>
-                            <DetailButton />
+                            <DetailButton typeReport={TypeReportEnum.DISTANCE_BETWEEN} color="#82ca9d" />
                             <Grid item>
                                 <BarChart
                                     width={600}
@@ -59,7 +69,7 @@ export default function Dashboard() {
                     </Grid>
                     <Grid item xs={6}>
                         <Grid container direction="column" spacing={2}>
-                            <DetailButton />
+                            <DetailButton typeReport={TypeReportEnum.TOUR_PER_MONTH} color="#66ccff" />
                             <Grid item>
                                 <BarChart
                                     width={600}
@@ -83,7 +93,7 @@ export default function Dashboard() {
             </Grid>
             <Grid container item xs={6} alignItems="center">
                 <Grid container direction="column" spacing={2}>
-                    <DetailButton />
+                    <DetailButton typeReport={TypeReportEnum.TIME_TRAVELED} color="#8884d8" />
                     <Grid item>
                         <AreaChart
                             width={500}

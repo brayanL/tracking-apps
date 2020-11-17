@@ -1,4 +1,4 @@
 export interface TourPerMonth {
-  totalTrips: number;
+  tourPerMonth: number;
   month: number;
 }

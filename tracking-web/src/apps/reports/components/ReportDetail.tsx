@@ -1,10 +1,19 @@
 /* eslint-disable max-len */
 import React, { useEffect } from 'react';
-import { FormControl, Grid, InputBase, InputLabel, MenuItem, Select, } from '@material-ui/core';
+import {
+    FormControl,
+    Grid,
+    InputBase,
+    InputLabel,
+    MenuItem,
+    Select,
+} from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { DatePicker } from '@material-ui/pickers';
 import { AxiosError, AxiosResponse } from 'axios';
+import PropTypes from 'prop-types';
 import * as moment from 'moment';
+
 import api from '../../../utils/Api';
 import BarChartReport from './BarChartReport';
 import { DistanceBetween } from '../../../types/DistanceBetween';
@@ -63,19 +72,21 @@ interface DataReport {
     data: Array<DistanceBetween | TourPerMonth | TimeTraveled>,
     nameBar: string,
     dataKey: string,
+    color: string,
 }
 
-export default function ReportDetail() {
+export default function ReportDetail(props) {
     const [typeReport, setTypeReport] = React.useState(TypeReportEnum.DISTANCE_BETWEEN);
     const [year, setYear] = React.useState(new Date());
     const [dataReport, setDataReport] = React.useState<DataReport>({
         data: [],
         nameBar: '',
         dataKey: '',
+        color: '',
     });
     const classes = useStyles();
 
-    const getReport = (year: number, typeReport: TypeReportEnum) => {
+    const getReport = (year: number, typeReport: TypeReportEnum, color: string | undefined = '#66ccff') => {
         api.get(process.env.REACT_APP_BASE_URL!.concat('/reports/', typeReport), { params: { year } })
             .then((response: AxiosResponse) => {
                 setDataReport({
@@ -83,6 +94,7 @@ export default function ReportDetail() {
                         .map(({ [typeReport]: value, month }) => ({ name: moment.months(month), [typeReport]: value })),
                     nameBar: getChartDescription(typeReport),
                     dataKey: typeReport,
+                    color,
                 });
             }).catch((error: AxiosError) => {
                 console.log('error: ', error);
@@ -90,7 +102,8 @@ export default function ReportDetail() {
     };
 
     useEffect(() => {
-        getReport(new Date().getFullYear(), TypeReportEnum.DISTANCE_BETWEEN);
+        setTypeReport(props.location.state.typeReport);
+        getReport(year.getFullYear(), props.location.state.typeReport, props.location.state.color);
     }, []);
 
     const handleChangeReport = (e) => {
@@ -100,6 +113,7 @@ export default function ReportDetail() {
 
     const handleChangeYear = (e) => {
         setYear(new Date(e));
+        getReport(new Date(e).getFullYear(), typeReport);
     };
 
     return (
@@ -145,8 +159,18 @@ export default function ReportDetail() {
                     nameBar={dataReport.nameBar}
                     dataKey={dataReport.dataKey}
                     data={dataReport.data}
+                    color={dataReport.color}
                 />
             </Grid>
         </Grid>
     );
 }
+
+ReportDetail.propTypes = {
+    location: PropTypes.shape({
+        state: PropTypes.shape({
+            typeReport: PropTypes.string,
+            color: PropTypes.string,
+        }),
+    }).isRequired,
+};

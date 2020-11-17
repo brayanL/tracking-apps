@@ -11,7 +11,7 @@ import {
 } from 'recharts';
 import PropTypes from 'prop-types';
 
-export default function BarChartReport({ data, nameBar, dataKey }) {
+export default function BarChartReport({ data, nameBar, dataKey, color }) {
     return (
         <BarChart
             width={800}
@@ -26,7 +26,7 @@ export default function BarChartReport({ data, nameBar, dataKey }) {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar name={nameBar} dataKey={dataKey} fill="#66ccff" barSize={20} />
+            <Bar name={nameBar} dataKey={dataKey} fill={color} barSize={20} />
         </BarChart>
     );
 }
@@ -35,4 +35,5 @@ BarChartReport.propTypes = {
     data: PropTypes.array.isRequired,
     nameBar: PropTypes.string.isRequired,
     dataKey: PropTypes.string.isRequired,
+    color: PropTypes.string.isRequired,
 };
