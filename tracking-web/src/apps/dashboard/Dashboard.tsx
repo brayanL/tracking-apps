@@ -11,6 +11,7 @@ import 'moment/locale/es';
 import { startDashboard } from '../common/actions';
 import { RootState } from '../../store/reducers';
 import TypeReportEnum from '../../utils/TypeReportEnum';
+import TypeReportColorEnum from '../../utils/TypeReportColorEnum';
 
 const DetailButton = ({ color, typeReport }) => {
     return (
@@ -47,7 +48,10 @@ export default function Dashboard() {
                 <Grid container direction="column">
                     <Grid item xs={6}>
                         <Grid container direction="column" spacing={2}>
-                            <DetailButton typeReport={TypeReportEnum.DISTANCE_BETWEEN} color="#82ca9d" />
+                            <DetailButton
+                                typeReport={TypeReportEnum.DISTANCE_BETWEEN}
+                                color={TypeReportColorEnum.DISTANCE_BETWEEN}
+                            />
                             <Grid item>
                                 <BarChart
                                     width={600}
@@ -62,14 +66,22 @@ export default function Dashboard() {
                                     <YAxis />
                                     <Tooltip />
                                     <Legend />
-                                    <Bar name="Distancia Recorrida" dataKey="distanceBetween" fill="#82ca9d" barSize={20} />
+                                    <Bar
+                                        name="Distancia Recorrida"
+                                        dataKey="distanceBetween"
+                                        fill={TypeReportColorEnum.DISTANCE_BETWEEN}
+                                        barSize={20}
+                                    />
                                 </BarChart>
                             </Grid>
                         </Grid>
                     </Grid>
                     <Grid item xs={6}>
                         <Grid container direction="column" spacing={2}>
-                            <DetailButton typeReport={TypeReportEnum.TOUR_PER_MONTH} color="#66ccff" />
+                            <DetailButton
+                                typeReport={TypeReportEnum.TOUR_PER_MONTH}
+                                color={TypeReportColorEnum.TOUR_PER_MONTH}
+                            />
                             <Grid item>
                                 <BarChart
                                     width={600}
@@ -84,7 +96,12 @@ export default function Dashboard() {
                                     <YAxis />
                                     <Tooltip />
                                     <Legend />
-                                    <Bar name="Viajes por mes" dataKey="tourPerMonth" fill="#66ccff" barSize={20} />
+                                    <Bar
+                                        name="Viajes por mes"
+                                        dataKey="tourPerMonth"
+                                        fill={TypeReportColorEnum.TOUR_PER_MONTH}
+                                        barSize={20}
+                                    />
                                 </BarChart>
                             </Grid>
                         </Grid>
@@ -93,7 +110,10 @@ export default function Dashboard() {
             </Grid>
             <Grid container item xs={6} alignItems="center">
                 <Grid container direction="column" spacing={2}>
-                    <DetailButton typeReport={TypeReportEnum.TIME_TRAVELED} color="#8884d8" />
+                    <DetailButton
+                        typeReport={TypeReportEnum.TIME_TRAVELED}
+                        color={TypeReportColorEnum.TIME_TRAVELED}
+                    />
                     <Grid item>
                         <AreaChart
                             width={500}
@@ -108,7 +128,13 @@ export default function Dashboard() {
                             <YAxis />
                             <Tooltip />
                             <Legend />
-                            <Area name="Tiempo viajado" type="monotone" dataKey="timeTraveled" stroke="#8884d8" fill="#8884d8" />
+                            <Area
+                                name="Tiempo viajado"
+                                type="monotone"
+                                dataKey="timeTraveled"
+                                stroke={TypeReportColorEnum.TIME_TRAVELED}
+                                fill={TypeReportColorEnum.TIME_TRAVELED}
+                            />
                         </AreaChart>
                     </Grid>
                 </Grid>

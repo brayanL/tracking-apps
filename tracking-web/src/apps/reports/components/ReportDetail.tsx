@@ -20,6 +20,7 @@ import { DistanceBetween } from '../../../types/DistanceBetween';
 import { TourPerMonth } from '../../../types/TourPerMonth';
 import { TimeTraveled } from '../../../types/TimeTraveled';
 import TypeReportEnum from '../../../utils/TypeReportEnum';
+import TypeReportColorEnum from '../../../utils/TypeReportColorEnum';
 
 const useStyles = makeStyles((theme) => ({
     margin: {
@@ -102,8 +103,9 @@ export default function ReportDetail(props) {
     };
 
     useEffect(() => {
-        setTypeReport(props.location.state.typeReport);
-        getReport(year.getFullYear(), props.location.state.typeReport, props.location.state.color);
+        setTypeReport(props?.location?.state?.typeReport || TypeReportEnum.DISTANCE_BETWEEN);
+        getReport(year.getFullYear(), props?.location?.state?.typeReport || TypeReportEnum.DISTANCE_BETWEEN,
+            props?.location?.state?.color || TypeReportColorEnum.DISTANCE_BETWEEN);
     }, []);
 
     const handleChangeReport = (e) => {
