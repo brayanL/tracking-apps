@@ -1,5 +1,7 @@
 package com.tracking.tracking.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -17,6 +19,7 @@ public class User {
     private String fullname;
 
     @Column(name="password")
+    @JsonIgnore
     private String password;
 
     @Column(name="rol")
