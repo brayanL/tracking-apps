@@ -1,7 +1,5 @@
 package com.tracking.tracking.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 
 @Entity
@@ -19,7 +17,6 @@ public class User {
     private String fullname;
 
     @Column(name="password")
-    @JsonIgnore
     private String password;
 
     @Column(name="rol")
@@ -27,6 +24,9 @@ public class User {
 
     @Column(name="active")
     private boolean active = true;
+
+    @Column
+    private boolean isSuperUser = false;
 
     public long getId() {
         return userId;

@@ -14,7 +14,7 @@ import {
 import {makeStyles} from "@material-ui/core/styles";
 import useSWR from "swr";
 import {fetcher} from "../../utils/HttpActions";
-import {User} from "../../types/User";
+import {getRolName, User} from "../../types/User";
 import UserDialog from "./UserDialog";
 
 const useStyles = makeStyles({
@@ -38,7 +38,7 @@ export default function Users() {
 
   return (
     <>
-      <UserDialog open={openDialog} handleClose={handleCloseDialog} />
+      {openDialog && <UserDialog open={openDialog} handleClose={handleCloseDialog} />}
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <Typography component="div">
@@ -71,7 +71,7 @@ export default function Users() {
                 <TableCell>{user.id}</TableCell>
                 <TableCell>{user.fullname}</TableCell>
                 <TableCell>{user.username}</TableCell>
-                <TableCell>{user.rol}</TableCell>
+                <TableCell>{getRolName(user.rol)}</TableCell>
                 <TableCell>{user.active ? 'Activo': 'Inactivo'}</TableCell>
               </TableRow>
             ))}
