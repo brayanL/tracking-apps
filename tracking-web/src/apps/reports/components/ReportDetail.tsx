@@ -12,6 +12,7 @@ import {makeStyles, withStyles} from '@material-ui/core/styles';
 import {DatePicker} from '@material-ui/pickers';
 import {AxiosError, AxiosResponse} from 'axios';
 import PropTypes from 'prop-types';
+import moment from "moment";
 
 import api from '../../../utils/Api';
 import BarChartReport from './BarChartReport';
@@ -89,14 +90,13 @@ export default function ReportDetail(props) {
   const getReport = (year: number, typeReport: TypeReportEnum, color: string | undefined = '#66ccff') => {
     api.get(process.env.REACT_APP_BASE_URL!.concat('/reports/', typeReport), {params: {year}})
       .then((response: AxiosResponse) => {
-        console.log('response: ', response);
-        /*setDataReport({
+        setDataReport({
           data: response.data
-            .map(({[typeReport]: value, month}) => ({name: moment.months(month), [typeReport]: value})),
+            .map((value) => ({ ...value, name: moment.months(value.month - 1) })),
           nameBar: getChartDescription(typeReport),
           dataKey: typeReport,
           color,
-        });*/
+        });
       }).catch((error: AxiosError) => {
       console.log('error: ', error);
     });
@@ -142,7 +142,7 @@ export default function ReportDetail(props) {
           xs={12}
           lg={4}
           container
-          justify="flex-start"
+          justifyContent="flex-start"
           alignItems="center"
         >
           <DatePicker

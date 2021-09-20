@@ -1,5 +1,7 @@
-apply plugin: 'com.android.application'
-
+plugins {
+    id 'com.android.application'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+}
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -18,7 +20,7 @@ android {
         }
         debug {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "BASE_URL", "\"http://192.168.100.4:8080/\""
+            buildConfigField "String", "BASE_URL", "\"http://192.168.1.29:8080/\""
         }
     }
     compileOptions {
