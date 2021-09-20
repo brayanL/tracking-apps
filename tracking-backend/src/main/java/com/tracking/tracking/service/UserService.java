@@ -2,6 +2,7 @@ package com.tracking.tracking.service;
 
 import com.tracking.tracking.entity.User;
 import com.tracking.tracking.repository.UserRepository;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service("userService")
 public class UserService implements UserDetailsService {
@@ -46,5 +48,14 @@ public class UserService implements UserDetailsService {
 
     public User registerUser(User user) {
         return userRepository.save(user);
+    }
+
+    public User inactivateUser(long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null) {
+            user.setActive(false);
+            userRepository.save(user);
+        }
+        return user;
     }
 }

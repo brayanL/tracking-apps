@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Box, Button,
   Grid,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -9,10 +10,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
   Typography
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import useSWR from "swr";
+import useSWR, {mutate} from "swr";
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import {fetcher} from "../../utils/HttpActions";
 import {getRolName, User} from "../../types/User";
 import UserDialog from "./UserDialog";
@@ -34,6 +37,15 @@ export default function Users() {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+  }
+
+  const handleDeleteUser = async (user: User) => {
+    try {
+      await fetcher(`${process.env.REACT_APP_BASE_URL}/authenticate/inactivate/${user.id}`);
+      await mutate(`${process.env.REACT_APP_BASE_URL}/authenticate/users`);
+    } catch (e) {
+      console.error('Exception:', e);
+    }
   }
 
   return (
@@ -63,6 +75,7 @@ export default function Users() {
               <TableCell>Nombre de Usuario</TableCell>
               <TableCell>Rol</TableCell>
               <TableCell>Activo</TableCell>
+              <TableCell>Opciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -73,6 +86,15 @@ export default function Users() {
                 <TableCell>{user.username}</TableCell>
                 <TableCell>{getRolName(user.rol)}</TableCell>
                 <TableCell>{user.active ? 'Activo': 'Inactivo'}</TableCell>
+                <TableCell>
+                  {user.active && (
+                    <IconButton onClick={() => handleDeleteUser(user)}>
+                      <Tooltip title="Eliminar Usuario">
+                        <DeleteOutlineIcon />
+                      </Tooltip>
+                    </IconButton>
+                  )}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
