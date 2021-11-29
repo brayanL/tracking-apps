@@ -2,12 +2,15 @@ package com.tracking.tracking.configuration;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collection;
 
 import static java.util.Collections.emptyList;
 
@@ -17,17 +20,22 @@ public class JwtUtil {
     private static String secret;*/
 
     // Método para crear el JWT y enviarlo al cliente en el header de la respuesta
-    static void addAuthentication(HttpServletResponse res, String username) {
-
-        String token = Jwts.builder()
-                .setSubject(username)
+    static void addAuthentication(HttpServletResponse res, String username, Collection<? extends GrantedAuthority> authorities) {
+        try {
+            JSONObject json = new JSONObject();
+            json.put("username", username);
+            json.put("role", authorities.toArray()[0].toString());
+            String token = Jwts.builder()
+                .setSubject(json.toString())
                 // Hash con el que firmaremos la clave
-
                 .signWith(SignatureAlgorithm.HS512, "mySecret")
                 .compact();
 
-        //agregamos al encabezado el token
-        res.addHeader("Authorization", "Bearer " + token);
+            //agregamos al encabezado el token
+            res.addHeader("Authorization", "Bearer " + token);
+        } catch (JSONException e) {
+            System.out.println("JSON Exception");
+        }
     }
 
     // Método para validar el token enviado por el cliente

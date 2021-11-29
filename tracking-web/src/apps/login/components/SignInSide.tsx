@@ -16,12 +16,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {makeStyles} from '@material-ui/core/styles';
 import {Controller, useForm} from 'react-hook-form';
 import * as yup from 'yup';
-import PropTypes from 'prop-types';
 
 import {Credentials, startLogin} from '../slices/loginSlice';
 import {RootState} from '../../../store/reducers';
 import Copyright from '../../common/Copyright';
 import {yupResolver} from "@hookform/resolvers/yup";
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,12 +59,14 @@ const loginSchema: yup.ObjectSchema<Credentials> = yup.object({
   password: yup.string().required('Este campo es requerido'),
 }).defined();
 
-export default function SignInSide({history}) {
+export default function SignInSide() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const login = useSelector((state: RootState) => state.login);
 
-  const {register, handleSubmit, control, formState: {errors}} = useForm({resolver: yupResolver(loginSchema)});
+  const {handleSubmit, control, formState: {errors}} = useForm({resolver: yupResolver(loginSchema)});
+  let history = useHistory();
+
 
   useEffect(() => {
     if (login.isSuccess) {
@@ -156,9 +158,3 @@ export default function SignInSide({history}) {
     </Grid>
   );
 }
-
-SignInSide.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
