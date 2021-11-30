@@ -29,10 +29,16 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import mainLayoutStyles from './main-layout-style';
 import Copyright from '../apps/common/Copyright';
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../store/reducers";
+import {logout} from "../apps/common/actions";
+import {UserRol} from "../types/User";
 
 export default function MainLayout({children}) {
   const classes = mainLayoutStyles();
   const [open, setOpen] = React.useState(true);
+  const login = useSelector((state: RootState) => state.login);
+  const dispatch = useDispatch();
 
   const history = useHistory();
 
@@ -43,6 +49,11 @@ export default function MainLayout({children}) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const closeSession = () => {
+    dispatch(logout());
+    history.push('/login');
+  }
 
   return (
     <div className={classes.root}>
@@ -103,13 +114,15 @@ export default function MainLayout({children}) {
             </ListItemIcon>
             <ListItemText primary="Reporte Avanzado"/>
           </ListItem>
-          <ListItem button onClick={() => history.push('/users')}>
-            <ListItemIcon>
-              <PeopleIcon/>
-            </ListItemIcon>
-            <ListItemText primary="Usuarios"/>
-          </ListItem>
-          <ListItem button>
+          {login.role === UserRol[UserRol.ADMINISTRADOR] && (
+            <ListItem button onClick={() => history.push('/users')}>
+              <ListItemIcon>
+                <PeopleIcon/>
+              </ListItemIcon>
+              <ListItemText primary="Usuarios"/>
+            </ListItem>
+          )}
+          <ListItem button onClick={closeSession}>
             <ListItemIcon>
               <ExitToAppIcon/>
             </ListItemIcon>

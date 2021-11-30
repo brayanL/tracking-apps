@@ -3,13 +3,13 @@ import {Redirect, Route, Switch} from 'react-router-dom';
 import SignInSide from '../apps/login/components/SignInSide';
 import Dashboard from '../apps/dashboard/Dashboard';
 import ReportAdvanced from '../apps/reports/components/ReportAdvanced';
-import RouteWithLayout from './RouteWithLayout';
 import MainLayout from '../layouts/MainLayout';
 import ReportDetail from '../apps/reports/components/ReportDetail';
 import Users from "../apps/users/Users";
 import {useSelector} from "react-redux";
 import {RootState} from "../store/reducers";
 import AuthenticatedRoute from "../apps/login/components/AuthenticatedRoute";
+import {UserRol} from "../types/User";
 
 export default function Routes() {
   const login = useSelector((state: RootState) => state.login);
@@ -17,7 +17,6 @@ export default function Routes() {
 
   useEffect(() => {
     if (login.isSuccess) {
-      console.log('isSuccess: ', login.isSuccess);
       setIsAuthenticated(true);
     }
   }, [login.isSuccess]);
@@ -29,29 +28,29 @@ export default function Routes() {
         path="/dashboard"
         component={Dashboard}
         layout={MainLayout}
-        appProps={{ isAuthenticated }}
+        appProps={{isAuthenticated}}
       />
       <AuthenticatedRoute
         path="/reports/advanced"
         component={ReportAdvanced}
         layout={MainLayout}
-        appProps={{ isAuthenticated }}
+        appProps={{isAuthenticated}}
       />
       <AuthenticatedRoute
         path="/reports/detail"
         component={ReportDetail}
         layout={MainLayout}
-        appProps={{ isAuthenticated }}
+        appProps={{isAuthenticated}}
       />
       <AuthenticatedRoute
         path="/users"
         component={Users}
         layout={MainLayout}
-        appProps={{ isAuthenticated }}
+        appProps={{isAuthenticated: isAuthenticated && login.role === UserRol[UserRol.ADMINISTRADOR]}}
       />
-      {/*<Route exact path="/">
-        {isAuthenticated ? <Redirect to="/reports/advanced" /> : <SignInSide />}
-      </Route>*/}
+      <Route exact path="/">
+        {isAuthenticated ? <Redirect to="/reports/advanced"/> : <SignInSide/>}
+      </Route>
     </Switch>
   );
 }

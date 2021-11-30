@@ -44,7 +44,7 @@ export default function UserDialog({open, handleClose}: userDialogProps): JSX.El
       password: "",
       passwordConfirm: "",
       active: true,
-      rol: UserRol.Usuario,
+      rol: UserRol.USUARIO,
     }
   });
 
@@ -176,8 +176,8 @@ export default function UserDialog({open, handleClose}: userDialogProps): JSX.El
                       id="demo-simple-select-filled"
                       label="Rol"
                     >
-                      <MenuItem value={UserRol.Usuario}>Usuario</MenuItem>
-                      <MenuItem value={UserRol.Administrador}>Administrador</MenuItem>
+                      <MenuItem value={UserRol.USUARIO}>Usuario</MenuItem>
+                      <MenuItem value={UserRol.ADMINISTRADOR}>Administrador</MenuItem>
                     </Select>
                   )}
                 />

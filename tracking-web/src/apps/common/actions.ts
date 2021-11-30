@@ -1,6 +1,7 @@
 import {
     CommonActionTypes,
     DatesPayload,
+    RESET_STATE,
     SET_ERROR,
     START_ADVANCED_REPORTS,
     START_GET_DASHBOARD,
@@ -16,6 +17,12 @@ export function startAdvancedReports(dates: DatesPayload): CommonActionTypes {
 export function startDashboard(): CommonActionTypes {
     return {
         type: START_GET_DASHBOARD,
+    };
+}
+
+export function logout(): CommonActionTypes {
+    return {
+        type: RESET_STATE,
     };
 }
 

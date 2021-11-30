@@ -4,6 +4,7 @@ export const START_GET_DASHBOARD = 'START_GET_DASHBOARD';
 // errors
 export const SET_ERROR = 'SET_ERROR';
 export const HIDE_ERROR = 'HIDE_ERROR';
+export const RESET_STATE = 'RESET_STATE';
 
 export interface DatesPayload {
     fromDate: string
@@ -24,4 +25,8 @@ interface ErrorAction {
     payload: string
 }
 
-export type CommonActionTypes = StartAdvancedReportAction | ErrorAction | ShowDashboardAction;
+interface CloseSessionAction {
+    type: typeof RESET_STATE,
+}
+
+export type CommonActionTypes = StartAdvancedReportAction | ErrorAction | ShowDashboardAction | CloseSessionAction;

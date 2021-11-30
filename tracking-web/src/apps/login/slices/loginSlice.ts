@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {parseJwt} from "../../../utils/CommonUtils";
 
 export type Credentials = {
     username: string,
@@ -11,14 +12,16 @@ interface LoginData {
 
 interface LoginState {
     loading: boolean,
-    data: object,
+    data: { token: string },
+    role: string,
     errorMessage: string,
     isSuccess: boolean
 }
 
 const initialState: LoginState = {
     loading: false,
-    data: {},
+    data: { token: '' },
+    role: '',
     errorMessage: '',
     isSuccess: false,
 };
@@ -31,8 +34,12 @@ const loginSlice = createSlice({
             state.loading = true;
         },
         successLogin(state, action: PayloadAction<LoginData>) {
+            const { sub } = parseJwt(action.payload.token);
+            const { role } = JSON.parse(sub);
+
             state.loading = false;
             state.data = action.payload;
+            state.role = role;
             state.isSuccess = true;
         },
         failedLogin(state, action) {
